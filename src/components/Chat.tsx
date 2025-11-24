@@ -4,8 +4,16 @@ import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
 
+interface User {
+  id: number;
+  email: string;
+  username: string;
+  token: string;
+}
+
 interface ChatProps {
   onClose: () => void;
+  user: User | null;
 }
 
 interface Message {
@@ -15,7 +23,7 @@ interface Message {
   timestamp: Date;
 }
 
-const Chat = ({ onClose }: ChatProps) => {
+const Chat = ({ onClose, user }: ChatProps) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -38,6 +46,61 @@ const Chat = ({ onClose }: ChatProps) => {
     scrollToBottom();
   }, [messages]);
 
+  useEffect(() => {
+    if (user) {
+      loadChatHistory();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chatId, user]);
+
+  const loadChatHistory = async () => {
+    if (!user) return;
+
+    try {
+      const response = await fetch(`https://functions.poehali.dev/5d4033c7-415c-4990-b1fb-d4dd0598a771?chat_id=${chatId}`, {
+        method: 'GET',
+        headers: {
+          'X-User-Id': user.id.toString(),
+        },
+      });
+
+      const data = await response.json();
+      if (data.messages && data.messages.length > 0) {
+        const loadedMessages: Message[] = data.messages.map((msg: any) => ({
+          id: Math.random().toString(),
+          text: msg.text,
+          isUser: msg.isUser,
+          timestamp: new Date(msg.timestamp)
+        }));
+        setMessages(loadedMessages);
+      }
+    } catch (error) {
+      console.error('Failed to load chat history:', error);
+    }
+  };
+
+  const saveMessage = async (text: string, isUser: boolean) => {
+    if (!user) return;
+
+    try {
+      await fetch('https://functions.poehali.dev/5d4033c7-415c-4990-b1fb-d4dd0598a771', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-User-Id': user.id.toString(),
+        },
+        body: JSON.stringify({
+          action: 'save_message',
+          chat_id: chatId,
+          message: text,
+          is_user: isUser
+        })
+      });
+    } catch (error) {
+      console.error('Failed to save message:', error);
+    }
+  };
+
   const sendMessage = async () => {
     if (!inputValue.trim() || isLoading) return;
 
@@ -51,6 +114,10 @@ const Chat = ({ onClose }: ChatProps) => {
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
     setIsLoading(true);
+    
+    if (user) {
+      saveMessage(inputValue, true);
+    }
 
     try {
       const response = await fetch('https://functions.poehali.dev/91139989-5558-4c9f-8735-3000d48d388a', {
@@ -74,6 +141,10 @@ const Chat = ({ onClose }: ChatProps) => {
           timestamp: new Date()
         };
         setMessages(prev => [...prev, botMessage]);
+        
+        if (user) {
+          saveMessage(data.message, false);
+        }
 
         if (data.command === 'operator') {
           toast({

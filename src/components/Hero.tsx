@@ -1,11 +1,20 @@
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 
-interface HeroProps {
-  onStartChat: () => void;
+interface User {
+  id: number;
+  email: string;
+  username: string;
+  token: string;
 }
 
-const Hero = ({ onStartChat }: HeroProps) => {
+interface HeroProps {
+  onStartChat: () => void;
+  user: User | null;
+  onLogout: () => void;
+}
+
+const Hero = ({ onStartChat, user, onLogout }: HeroProps) => {
   return (
     <div className="relative overflow-hidden">
       <div 
@@ -16,6 +25,15 @@ const Hero = ({ onStartChat }: HeroProps) => {
           backgroundPosition: 'center'
         }}
       />
+
+      {user && (
+        <div className="absolute top-4 right-4 z-20 flex items-center gap-3 bg-card/80 backdrop-blur-sm px-4 py-2 rounded-full border border-border">
+          <span className="text-sm font-medium">{user.username}</span>
+          <Button variant="ghost" size="sm" onClick={onLogout}>
+            <Icon name="LogOut" size={16} />
+          </Button>
+        </div>
+      )}
       
       <div className="container mx-auto px-4 py-20 relative z-10">
         <div className="max-w-5xl mx-auto">

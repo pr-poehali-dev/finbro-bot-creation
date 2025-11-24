@@ -1,3 +1,5 @@
 {
+  "auth": "https://functions.poehali.dev/a8821c20-d186-4c5b-b57b-cdbea7c2a76b",
+  "chat-history": "https://functions.poehali.dev/5d4033c7-415c-4990-b1fb-d4dd0598a771",
   "finbro-chat": "https://functions.poehali.dev/91139989-5558-4c9f-8735-3000d48d388a"
 }
