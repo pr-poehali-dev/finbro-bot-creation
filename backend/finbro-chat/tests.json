@@ -1,0 +1,30 @@
+{
+  "tests": [
+    {
+      "name": "Test chat message",
+      "method": "POST",
+      "body": {
+        "message": "Привет, расскажи про кредиты",
+        "chat_id": "test_chat_123"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "status": "boolean"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Test missing parameters",
+      "method": "POST",
+      "body": {
+        "message": "Тест"
+      },
+      "expectedStatus": 400,
+      "expectedBody": {
+        "status": false,
+        "error": "string"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

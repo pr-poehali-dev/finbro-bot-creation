@@ -53,7 +53,7 @@ const Chat = ({ onClose }: ChatProps) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('https://app.myjedai.ru/api/rest/85d6f91bb1e70414414cd0bb3ca059be', {
+      const response = await fetch('https://functions.poehali.dev/91139989-5558-4c9f-8735-3000d48d388a', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
