@@ -57,10 +57,7 @@ const Hero = ({ onStartChat, user, onLogout }: HeroProps) => {
                   onClick={onStartChat}
                   size="lg"
                   className="text-lg px-8 py-6 shadow-xl hover:shadow-2xl transition-all bg-gradient-to-r from-primary to-purple-600 hover:scale-105"
-                >
-                  <Icon name="MessageCircle" size={20} className="mr-2" />
-                  Начать бесплатно
-                </Button>
+                >Начать общение</Button>
                 
                 <Button 
                   variant="outline" 
