@@ -63,10 +63,7 @@ const Hero = ({ onStartChat, user, onLogout }: HeroProps) => {
                   variant="outline" 
                   size="lg"
                   className="text-lg px-8 py-6 border-2"
-                >
-                  <Icon name="PlayCircle" size={20} className="mr-2" />
-                  Как это работает
-                </Button>
+                ></Button>
               </div>
 
               <div className="flex flex-wrap gap-6 justify-center lg:justify-start pt-6 text-sm text-muted-foreground">
